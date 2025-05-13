@@ -1,2 +1,2 @@
 # httpslog
-Logger for http transport
+HTTP transport with slog logger
