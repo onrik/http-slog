@@ -62,19 +62,29 @@ func (t *transport) logRequest(request *http.Request) error {
 		fields = append(fields, "query", request.URL.Query())
 	}
 
-	message := fmt.Sprintf("Request-> %s %s", request.Method, request.URL.Path)
+	path := request.URL.Path
+	if path == "" {
+		path = "/"
+	}
+	message := fmt.Sprintf("Request-> %s %s", request.Method, path)
 	t.slog.InfoContext(request.Context(), message, fields...)
 
 	return nil
 }
 
 func (t *transport) logResponse(request *http.Request, response *http.Response, responseErr error, latency time.Duration) error {
-	message := fmt.Sprintf("Response<- %s %s", request.Method, request.URL.Path)
+	path := request.URL.Path
+	if path == "" {
+		path = "/"
+	}
+
+	message := fmt.Sprintf("Response<- %s %s", request.Method, path)
 	fields := []any{
 		"latency", latency.String(),
 		"method", request.Method,
 		"url", request.URL.String(),
 	}
+
 	if responseErr != nil {
 		fields = append(fields, "error", responseErr)
 		t.slog.ErrorContext(request.Context(), message, fields...)
