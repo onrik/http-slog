@@ -8,7 +8,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/onrik/httpslog"
+	"github.com/onrik/http-slog"
 )
 
 func main() {
